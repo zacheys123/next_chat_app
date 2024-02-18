@@ -38,7 +38,7 @@ const Login = () => {
 					)}
 					<span className="text-sm text-right mt-3">
 						<span>Don't have an account,</span>
-						<Link className="underline" href={'/register'}>
+						<Link className="underline" href={'/signup'}>
 							Register here
 						</Link>
 					</span>

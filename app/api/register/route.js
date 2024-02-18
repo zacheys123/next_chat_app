@@ -10,19 +10,33 @@ const generateToken = (id) => {
 };
 export async function POST(req) {
 	try {
-		const { fullname, email, city, address, password } =
-			await req.json();
 		await connectDb();
+		const { fullname, email, city, username, password } =
+			await req.json();
+		const exists = await User.findOne({
+			$or: [{ email }, { username }],
+		});
+		if (exists) {
+			return NextResponse.json(
+				{
+					status: true,
+					message: 'Email/Username Exists,choose another',
+				},
+				{ status: 403 },
+			);
+		}
 		const hashedPass = await bcrypt.hash(password, 10);
-		const newUser = new User({
-			fullname,
+		const newUser = await User.create({
 			email,
+			fullname,
+
 			city,
-			address,
+			username,
 			password: hashedPass,
 		});
 
-		await newUser.save();
+		console.log(newUser?.email);
+
 		return NextResponse.json(
 			{
 				status: true,
@@ -32,8 +46,9 @@ export async function POST(req) {
 			{ status: 201 },
 		);
 	} catch (err) {
+		console.log(err);
 		return NextResponse.json(
-			{ status: false, message: 'Error while registering' },
+			{ status: false, message: 'Error while registering user' },
 			{ status: 500 },
 		);
 	}
