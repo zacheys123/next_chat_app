@@ -1,4 +1,3 @@
-const api = 'http://localhost:5000';
 export async function registerSlice(
 	form,
 	setError,
@@ -16,11 +15,11 @@ export async function registerSlice(
 		setError('Please fill all the fields');
 		return;
 	}
-	console.log(form);
+
 	try {
 		setError('');
 		setLoading(true);
-		const res = await fetch(`api/register`, {
+		const res = await fetch(`api/auth/register`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -28,20 +27,21 @@ export async function registerSlice(
 			body: JSON.stringify(form),
 		});
 		const data = await res.json();
-
+		console.log(data);
 		if (res.ok) {
 			setLoading(false);
-			const form = e.target;
-			form.reset();
-
 			setError(data?.message);
-
-			router.push('/gigme');
+			localStorage.setItem('token', JSON.stringify(token));
+			localStorage.setItem('profile', JSON.stringify(result));
+			setTimeout(() => {
+				router.push('/mainpage/gigme');
+			}, 3000);
 		} else {
 			setLoading(false);
-			console.log('user registration failed');
+			setError(data?.message);
 		}
 	} catch (error) {
+		setLoading(false);
 		if (error.message === 'Network Error') {
 			setError(error.message);
 			setLoading(false);

@@ -3,12 +3,12 @@ import { Button } from '@mui/material';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-const Login = () => {
+const LoginForm = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	return (
 		<div className="grid place-items-center h-screen ">
-			<div className="shadow-lg rounded-lg p-5 border-t-4 border-green-400 ">
+			<div className="shadow-lg rounded-lg p-5 border-t-4 border-green-400 md:w-[500px]">
 				<h1 className="text-center font-bold text-black-500">
 					Sign In
 				</h1>
@@ -18,9 +18,9 @@ const Login = () => {
 
 					<button
 						disabled={loading}
-						className={` bg-green-600 text-white font-bold cursor-pointer px-6 py-2`}
+						className={`bg-green-600 text-white font-bold cursor-pointer px-6 py-2`}
 					>
-						Login
+						Sign In
 					</button>
 					<button
 						disabled={loading}
@@ -38,7 +38,7 @@ const Login = () => {
 					)}
 					<span className="text-sm text-right mt-3">
 						<span>Don't have an account,</span>
-						<Link className="underline" href={'/signup'}>
+						<Link className="underline" href={'/auth/signup'}>
 							Register here
 						</Link>
 					</span>
@@ -48,4 +48,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default LoginForm;

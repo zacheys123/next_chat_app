@@ -8,11 +8,12 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+	const isLogged = false;
 	return (
 		<html lang="en">
-			<body className="min-h-screen">
+			<body>
 				<Nav />
-				<div className="min-h-screen justify-center items-center p-9">
+				<div className="min-h-screen justify-center items-center ">
 					{children}
 				</div>
 			</body>

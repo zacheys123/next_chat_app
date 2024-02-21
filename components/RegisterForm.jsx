@@ -10,6 +10,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { registerSlice } from '@/features/registerSlice';
 import { useRouter } from 'next/navigation';
+import { Alert } from 'flowbite-react';
+import { Button } from 'flowbite-react';
+import { HiInformationCircle } from 'react-icons/hi';
+import { AlertCircle } from 'lucide-react';
 const RegisterForm = () => {
 	const [data, setData] = useState({
 		fullname: '',
@@ -21,6 +25,7 @@ const RegisterForm = () => {
 	});
 	const router = useRouter();
 	const [error, setError] = useState('');
+	const [success, setSuccess] = useState('');
 	const [loading, setLoading] = useState(false);
 	const handleInput = (ev) => {
 		setData({ ...data, [ev.target.name]: ev.target.value });
@@ -38,11 +43,11 @@ const RegisterForm = () => {
 	};
 
 	return (
-		<div className="shadow-lg rounded-lg p-5 first:border-t-4 border-green-400 ">
-			<h1 className="text-xl font-bold text-center">
+		<div className="shadow-lg rounded-lg p-5 first:border-t-4 border-green-400  w-50 h-screen/2 md:w-[500px] ">
+			<h1 className="text-xl font-bold text-center mb-2">
 				Enter Register Details
 			</h1>{' '}
-			<form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+			<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 				<input
 					onChange={handleInput}
 					type="text"
@@ -55,21 +60,21 @@ const RegisterForm = () => {
 					value={data?.email}
 					name="email"
 					onChange={handleInput}
-					placeholder="Enter Email"
+					placeholder=" Email"
 				/>
 				<input
 					type="text"
 					value={data?.city}
 					onChange={handleInput}
 					name="city"
-					placeholder="Enter City"
+					placeholder=" City"
 				/>
 				<input
 					type="text"
 					value={data?.username}
 					name="username"
 					onChange={handleInput}
-					placeholder="Enter Username"
+					placeholder=" Username"
 				/>
 				<div className="flex gap-2 align-center">
 					<input
@@ -111,23 +116,30 @@ const RegisterForm = () => {
 						/>
 					)}{' '}
 				</div>{' '}
-				<button
-					type="submit"
-					className="w-100 py-2 rounded-md text-white bg-blue-500"
-				>
+				<Button variant="destructive" type="submit">
 					{!loading ? 'Register' : 'Adding User...'}
-				</button>
+				</Button>
 				{error && (
-					<div
-						className="bg-red-500  0 text-sm w-fit
-          p-1 text-white md:text-white -500 mt-2"
-					>
+					<Alert color="failure" icon={HiInformationCircle}>
 						{error}
-					</div>
+					</Alert>
+				)}
+				{error && (
+					<Alert color="success" icon={HiInformationCircle}>
+						{error}
+					</Alert>
 				)}
 				<div className="text-right text-sm mt-2">
-					<span> Already have an Account,</span>
-					<Link href={'/'}>Login here!!!</Link>
+					<span className="text-blue-500">
+						{' '}
+						Already have an Account,
+					</span>
+					<Link
+						href={'/auth/login'}
+						className="text-red-500 underline"
+					>
+						Login here!!!
+					</Link>
 				</div>
 			</form>
 		</div>
