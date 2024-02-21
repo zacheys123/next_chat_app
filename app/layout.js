@@ -8,7 +8,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-	const isLogged = false;
 	return (
 		<html lang="en">
 			<body>

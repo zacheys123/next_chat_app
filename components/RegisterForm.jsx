@@ -14,6 +14,9 @@ import { Alert } from 'flowbite-react';
 import { Button } from 'flowbite-react';
 import { HiInformationCircle } from 'react-icons/hi';
 import { AlertCircle } from 'lucide-react';
+import { TiTick } from 'react-icons/ti';
+import { Spinner } from 'flowbite-react';
+
 const RegisterForm = () => {
 	const [data, setData] = useState({
 		fullname: '',
@@ -39,7 +42,7 @@ const RegisterForm = () => {
 	const [cpass, setCpass] = useState(false);
 	const handleSubmit = (ev) => {
 		ev.preventDefault();
-		registerSlice(data, setError, setLoading, router);
+		registerSlice(data, setError, setLoading, router, setSuccess);
 	};
 
 	return (
@@ -56,9 +59,10 @@ const RegisterForm = () => {
 					placeholder="Enter Full Name"
 				/>
 				<input
-					type="text"
+					type="email"
 					value={data?.email}
 					name="email"
+					required
 					onChange={handleInput}
 					placeholder=" Email"
 				/>
@@ -70,6 +74,7 @@ const RegisterForm = () => {
 					placeholder=" City"
 				/>
 				<input
+					required
 					type="text"
 					value={data?.username}
 					name="username"
@@ -78,6 +83,7 @@ const RegisterForm = () => {
 				/>
 				<div className="flex gap-2 align-center">
 					<input
+						required
 						type={!pass ? 'password' : 'text'}
 						name="password"
 						value={data?.password}
@@ -98,6 +104,7 @@ const RegisterForm = () => {
 				</div>{' '}
 				<div className="flex gap-2 align-center">
 					<input
+						required
 						type={!cpass ? 'password' : 'text'}
 						value={data?.cpassword}
 						name="cpassword"
@@ -116,17 +123,21 @@ const RegisterForm = () => {
 						/>
 					)}{' '}
 				</div>{' '}
-				<Button variant="destructive" type="submit">
-					{!loading ? 'Register' : 'Adding User...'}
+				<Button
+					variant="destructive"
+					type="submit"
+					disabled={loading}
+				>
+					{!loading ? 'Register' : <Spinner color="info" />}
 				</Button>
 				{error && (
 					<Alert color="failure" icon={HiInformationCircle}>
 						{error}
 					</Alert>
 				)}
-				{error && (
-					<Alert color="success" icon={HiInformationCircle}>
-						{error}
+				{success && (
+					<Alert color="success" icon={TiTick}>
+						{success}
 					</Alert>
 				)}
 				<div className="text-right text-sm mt-2">

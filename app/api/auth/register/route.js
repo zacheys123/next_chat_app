@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
+import { COOKIE_NAME, MAX_AGE } from '@/constants';
 const generateToken = (id) => {
 	return jwt.sign({ id }, process.env.SECRET, {
 		expiresIn: '30d',
@@ -32,23 +33,23 @@ export async function POST(req) {
 						password: hashedPass,
 					});
 					const token = generateToken(newUser._id);
-					const serialized = serialize('mydataAuth', token, {
+					const serialized = serialize(COOKIE_NAME, token, {
 						httpOnly: true,
 						secure: process.env.NODE_ENV == 'production',
 						sameSite: 'strict',
-						maxAge: 60 * 60 * 24 * 30,
+						maxAge: MAX_AGE,
 						path: '/',
 					});
-					const results = NextResponse.json(
+					return NextResponse.json(
 						{
 							status: true,
 							message: 'User Registered Successfully',
 							result: newUser,
+							token,
 						},
 						{ headers: { 'Set-Cookie': serialized } },
 						{ status: 201 },
 					);
-					return results;
 				} else {
 					return NextResponse.json(
 						{

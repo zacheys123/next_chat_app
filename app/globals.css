@@ -77,5 +77,5 @@
 
 input {
 	@apply border border-gray-200 py-2 px-2
- focus:outline-none w-full;
+focus:ring-0  w-full;
 }

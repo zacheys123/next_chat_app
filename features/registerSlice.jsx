@@ -3,6 +3,7 @@ export async function registerSlice(
 	setError,
 	setLoading,
 	router,
+	setSuccess,
 ) {
 	if (
 		!form?.fullname ||
@@ -30,19 +31,23 @@ export async function registerSlice(
 		console.log(data);
 		if (res.ok) {
 			setLoading(false);
-			setError(data?.message);
-			localStorage.setItem('token', JSON.stringify(token));
-			localStorage.setItem('profile', JSON.stringify(result));
+			setError('');
+			setSuccess(data?.message);
+
 			setTimeout(() => {
 				router.push('/mainpage/gigme');
+				localStorage.setItem('token', JSON.stringify(data?.token));
+				localStorage.setItem('profile', JSON.stringify(result));
 			}, 3000);
 		} else {
 			setLoading(false);
+			setSuccess('');
 			setError(data?.message);
 		}
 	} catch (error) {
 		setLoading(false);
 		if (error.message === 'Network Error') {
+			setSuccess('');
 			setError(error.message);
 			setLoading(false);
 			setTimeout(() => {
