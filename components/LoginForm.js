@@ -1,6 +1,6 @@
 'use client';
 import { FaGoogle } from 'react-icons/fa';
-import { Alert, Button, TextInput } from 'flowbite-react';
+import { Alert, Button, Spinner, TextInput } from 'flowbite-react';
 import Link from 'next/link';
 import React, {
 	useCallback,
@@ -21,26 +21,18 @@ const LoginForm = () => {
 	const [success, setSuccess] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [pass, setPass] = useState(false);
-	const [formdata, setFormData] = useState({
-		email: '',
-		password: '',
-	});
 
 	('');
 	const router = useRouter();
 	const formref = useRef();
-	const handleInput = (ev) => {
-		setFormData({ ...formdata, [ev.target.name]: ev.target.value });
-	};
+
 	const handleLogin = useCallback((ev) => {
 		ev.preventDefault();
-
+		let email = ev.target.email.value;
+		let password = ev.target.password.value;
+		const formdata = { email, password };
 		LoginSlice(formdata, setLoading, setError, setSuccess, router);
 	}, []);
-	useEffect(() => {
-		formref.current = formdata;
-	}, []);
-
 	return (
 		<div className="grid place-items-center h-screen w-full relative bg-grey-500">
 			{success && (
@@ -67,16 +59,12 @@ const LoginForm = () => {
 						type="email"
 						name="email"
 						placeholder=" example@gmail.com"
-						onChange={handleInput}
-						value={formdata?.email}
 					/>
 					<div className="flex gap-2 align-center my-3 border border-grey-300 rounded-lg w-full p-1">
 						<input
 							className="border-none outline-0 w-full focus:ring-0 "
 							type={!pass ? 'password' : 'text'}
 							name="password"
-							onChange={handleInput}
-							value={formdata?.password}
 							placeholder="************"
 						/>
 						<div className="mt-1">
@@ -99,12 +87,11 @@ const LoginForm = () => {
 						className="mb-3"
 						type="submit"
 					>
-						Sign In
+						{!loading ? 'Sign In' : <Spinner color="info" />}
 					</Button>
 					<Button
 						type="button"
 						gradientDuoTone="pinkToOrange"
-						disabled={loading}
 						className="px-2"
 					>
 						<FaGoogle className="mr-3" /> Signin with Google

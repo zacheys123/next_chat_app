@@ -11,7 +11,6 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
 			<body>
-				<Nav />
 				<div className="min-h-screen justify-center items-center ">
 					{children}
 				</div>

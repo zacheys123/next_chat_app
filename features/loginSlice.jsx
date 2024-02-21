@@ -7,18 +7,35 @@ export const LoginSlice = async (
 	setSuccess,
 	router,
 ) => {
-	console.log(form);
-	if (!form?.email || !form?.password) {
-		setSuccess('');
-		setError('Please fill in all fields');
-		setTimeout(() => {
-			setError('');
-		}, 3000);
-		return;
-	}
 	try {
-		const res = await axios.post('/api/auth/login', form);
-	} catch (error) {}
+		setLoading(true);
+		setError('');
+		const res = await fetch(`api/auth/login`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(form),
+		});
+		const data = await res.json();
+		console.log(data);
+		if (res.ok) {
+			setLoading(false);
+			setError('');
+			setSuccess(data?.message);
 
-	console.log(form);
+			router.push('/gigme');
+			localStorage.setItem('token', JSON.stringify(data?.token));
+			localStorage.setItem('profile', JSON.stringify(data?.results));
+		} else {
+			setLoading(false);
+			setSuccess('');
+			setTimeout(() => {
+				setError('');
+			}, 4000);
+			setError(data?.message);
+		}
+	} catch (error) {
+		setLoading(false);
+	}
 };

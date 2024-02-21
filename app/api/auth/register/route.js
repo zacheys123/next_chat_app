@@ -7,7 +7,7 @@ import { serialize } from 'cookie';
 import { COOKIE_NAME, MAX_AGE } from '@/constants';
 const generateToken = (id) => {
 	return jwt.sign({ id }, process.env.SECRET, {
-		expiresIn: '30d',
+		expiresIn: MAX_AGE,
 	});
 };
 
