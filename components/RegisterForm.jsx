@@ -64,7 +64,7 @@ const RegisterForm = () => {
 					name="email"
 					required
 					onChange={handleInput}
-					placeholder=" Email"
+					placeholder=" example@gmail.com"
 				/>
 				<input
 					type="text"

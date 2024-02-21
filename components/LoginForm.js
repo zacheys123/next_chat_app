@@ -2,29 +2,45 @@
 import { FaGoogle } from 'react-icons/fa';
 import { Alert, Button, TextInput } from 'flowbite-react';
 import Link from 'next/link';
-import React, { useCallback, useState } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useRouter } from 'next/navigation';
 
 import { Toast } from 'flowbite-react';
 import { FaTelegramPlane } from 'react-icons/fa';
-import { HiCheck } from 'react-icons/hi';
+import { HiCheck, HiInformationCircle } from 'react-icons/hi';
+import { LoginSlice } from '@/features/loginSlice';
 const LoginForm = () => {
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [pass, setPass] = useState(false);
-	const [email, setEmail] = useState('');
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+	const [formdata, setFormData] = useState({
+		email: '',
+		password: '',
+	});
+
 	('');
 	const router = useRouter();
-	const form = { email, username, password };
+	const formref = useRef();
+	const handleInput = (ev) => {
+		setFormData({ ...formdata, [ev.target.name]: ev.target.value });
+	};
 	const handleLogin = useCallback((ev) => {
 		ev.preventDefault();
-		loginSlice(form, setLoading, setError, setSuccess, router);
+
+		LoginSlice(formdata, setLoading, setError, setSuccess, router);
 	}, []);
+	useEffect(() => {
+		formref.current = formdata;
+	}, []);
+
 	return (
 		<div className="grid place-items-center h-screen w-full relative bg-grey-500">
 			{success && (
@@ -49,19 +65,19 @@ const LoginForm = () => {
 					<TextInput
 						className="border-grey-300 rounded-lg focus:outline-none"
 						type="email"
-						placeholder="Enter Email"
-						onChange={(ev) => setEmail(ev.target.value)}
-						value={email}
+						name="email"
+						placeholder=" example@gmail.com"
+						onChange={handleInput}
+						value={formdata?.email}
 					/>
 					<div className="flex gap-2 align-center my-3 border border-grey-300 rounded-lg w-full p-1">
 						<input
 							className="border-none outline-0 w-full focus:ring-0 "
-							required
 							type={!pass ? 'password' : 'text'}
 							name="password"
-							onChange={(ev) => setPassword(ev.target.value)}
-							value={password}
-							placeholder="Enter Password"
+							onChange={handleInput}
+							value={formdata?.password}
+							placeholder="************"
 						/>
 						<div className="mt-1">
 							{pass ? (
@@ -81,15 +97,17 @@ const LoginForm = () => {
 						disabled={loading}
 						gradientMonochrome="info"
 						className="mb-3"
+						type="submit"
 					>
 						Sign In
 					</Button>
 					<Button
+						type="button"
 						gradientDuoTone="pinkToOrange"
 						disabled={loading}
 						className="px-2"
 					>
-						<FaGoogle /> Signin with Google
+						<FaGoogle className="mr-3" /> Signin with Google
 					</Button>
 					{error && (
 						<Alert color="failure" icon={HiInformationCircle}>
