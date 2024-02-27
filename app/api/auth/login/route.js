@@ -42,13 +42,7 @@ export async function POST(req) {
 					path: '/',
 				});
 				console.log(user);
-				// const response = { message: 'Login Successfull' };
-				// return new Response(JSON.stringify(response), {
-				// 	token,
-				// 	results: user,
-				// 	status: 200,
-				// 	headers: { 'Set-Cookie': serialized },
-				// });
+			
 				return NextResponse.json(
 					{
 						status: true,
