@@ -35,13 +35,16 @@ export async function registerSlice(
 			setSuccess(data?.message);
 
 			setTimeout(() => {
-				router.push('/mainpage/gigme');
+				router.push('/gigme');
 				localStorage.setItem('token', JSON.stringify(data?.token));
-				localStorage.setItem('profile', JSON.stringify(result));
+				localStorage.setItem('profile', JSON.stringify(data?.result));
 			}, 3000);
 		} else {
 			setLoading(false);
 			setSuccess('');
+			setTimeout(() => {
+				setError('');
+			}, 4000);
 			setError(data?.message);
 		}
 	} catch (error) {

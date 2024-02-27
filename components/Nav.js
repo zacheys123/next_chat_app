@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { TfiAlignRight } from 'react-icons/tfi';
 export default function Nav() {
 	return (
-		<main className="flex bg-black text-white items-center p-3 w-full md:justify-around justify-between bg-cyan-900">
+		<main className="flex bg-cyan-900 text-white items-center p-3 w-full md:justify-around justify-between bg-cyan-900">
 			<div className="flex md:flex-start md:w-20 ">
 				<span className=" bg-pink-100 text-red-500 font-bold p-1 rounded-b-xl shadow-red-500">
 					GigMe
 				</span>
 				<span className="  font-bold p-1 shadow-blue-500">Up</span>
 			</div>
+			
 			<div>
 				<div className="hidden md:inline  ">
 					{' '}

@@ -25,7 +25,7 @@ export default function MainPageLayout({ children }) {
 	}
 	return (
 		<main>
-			<div> </div>
+			<div></div>
 			{children}
 		</main>
 	);

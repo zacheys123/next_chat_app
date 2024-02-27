@@ -51,14 +51,14 @@ const RegisterForm = () => {
 				Enter Register Details
 			</h1>{' '}
 			<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-				<input
+				<input className='border-b-4 border-cyan-600 focus:ring-0 border-transparent focus:border-transparent'
 					onChange={handleInput}
 					type="text"
 					value={data?.fullname}
 					name="fullname"
 					placeholder="Enter Full Name"
 				/>
-				<input
+				<input className='border-b-4 border-cyan-600 focus:ring-0 border-transparent focus:border-transparent'
 					type="email"
 					value={data?.email}
 					name="email"
@@ -66,14 +66,14 @@ const RegisterForm = () => {
 					onChange={handleInput}
 					placeholder=" example@gmail.com"
 				/>
-				<input
+				<input className='border-b-4 border-cyan-600 focus:ring-0 border-transparent focus:border-transparent'
 					type="text"
 					value={data?.city}
 					onChange={handleInput}
 					name="city"
 					placeholder=" City"
 				/>
-				<input
+				<input className='border-b-4 border-cyan-600 focus:ring-0 border-transparent focus:border-transparent'
 					required
 					type="text"
 					value={data?.username}
@@ -82,7 +82,7 @@ const RegisterForm = () => {
 					placeholder=" Username"
 				/>
 				<div className="flex gap-2 align-center">
-					<input
+					<input className='border-b-4 border-cyan-600 focus:ring-0 border-transparent focus:border-transparent'
 						required
 						type={!pass ? 'password' : 'text'}
 						name="password"
@@ -103,7 +103,7 @@ const RegisterForm = () => {
 					)}{' '}
 				</div>{' '}
 				<div className="flex gap-2 align-center">
-					<input
+					<input className='border-b-4 border-cyan-600 focus:ring-0 border-transparent focus:border-transparent'
 						required
 						type={!cpass ? 'password' : 'text'}
 						value={data?.cpassword}
@@ -146,7 +146,7 @@ const RegisterForm = () => {
 						Already have an Account,
 					</span>
 					<Link
-						href={'/auth/login'}
+						href={'/login'}
 						className="text-red-500 underline"
 					>
 						Login here!!!
