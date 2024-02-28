@@ -2,23 +2,57 @@ import { global } from "@/reducerActions/authActions"
 
 export const authReducer=(state,action)=>{
 switch(action.type){
-    case global.SIGNUP:
+
+  case global.AUTHENTICATE:
+    return {
+      ...state,
+isAuthenticated:action.payload.isAuthenticated,
+mainUser:action.payload.mainUser,
+
+}
+
+  case global.SIGNUP:
         return {
           ...state,
-            isAuthenticated: true,
-            user: action.payload.user,
+         
+            mainUser: action.payload.mainUser,
             errormessage: action.payload.errormessage,
             successmessage: action.payload.successmessage
         }
-        case global.SIGNIN:
-          return {
+
+  case global.SUCCESS:
+        return {
             ...state,
-              isAuthenticated: true,
-              user: action.payload.user,
-              error: action.payload.errormessage,
-              success: action.payload.successmessage
+
+              errormessage:'',
+              successmessage: action.payload
           }
-          case global.THEME:
+          case global.ERROR:
+            return {
+                ...state,
+                
+                  mainUser:'',
+                  errormessage: action.payload,
+                  successmessage:''
+              }
+              case global.CLEAR_ERROR:
+                return {
+                    ...state,
+                    
+                    successmessage: '',
+                      errormessage: ''
+                    
+                  }
+                  case global.CLEAR_SUCCESS:
+                    return {
+                        ...state,
+                        
+                        errormessage: '',
+                          successmessage: ''
+                        
+                      }
+
+ case global.THEME:
             return {
               ...state,
        theme:!action.payload }

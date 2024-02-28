@@ -3,13 +3,12 @@ import axios from 'axios';
 export const LoginSlice = async (
 	form,
 	setLoading,
-	setError,
-	setSuccess,
+	setAuthState,
 	router,
 ) => {
 	try {
 		setLoading(true);
-		setError('');
+		setAuthState({type:global.CLEAR_ERROR})
 		const res = await fetch(`api/auth/login`, {
 			method: 'POST',
 			headers: {
@@ -21,19 +20,20 @@ export const LoginSlice = async (
 		console.log(data);
 		if (res.ok) {
 			setLoading(false);
-			setError('');
-			setSuccess(data?.message);
+			setAuthState({type:global.CLEAR_ERROR})
+			
+			setAuthState({type:global.SUCCESS,payload:data?.message});	
 
-			router.push('/gigme');
+			router.push('/');
 			localStorage.setItem('token', JSON.stringify(data?.token));
 			localStorage.setItem('profile', JSON.stringify(data?.results));
 		} else {
 			setLoading(false);
-			setSuccess('');
+			setAuthState({type:global.CLEAR_SUCCESS})
 			setTimeout(() => {
-				setError('');
+				setAuthState({type:global.CLEAR_ERROR})
 			}, 4000);
-			setError(data?.message);
+			setAuthState({type:global.ERROR,payload:data?.message})
 		}
 	} catch (error) {
 		setLoading(false);

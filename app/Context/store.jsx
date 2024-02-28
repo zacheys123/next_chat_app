@@ -3,11 +3,10 @@ import { authReducer } from "@/reducers/authReducer"
 import { createContext,useContext,useMemo,useReducer } from "react"
 
 const initialState={
-    user:'Unauthorized',
+    isAuthenticated:false,
+    mainUser:'unAuthorized',
     successmessage:'',
     errormessage:'',
-    error:'',
-    success:'',
     theme:false
 }
 

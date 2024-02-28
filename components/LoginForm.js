@@ -11,31 +11,28 @@ import React, {
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useRouter } from 'next/navigation';
-
+import { useGlobalContext } from '@/app/Context/store';
 import { Toast } from 'flowbite-react';
 import { FaTelegramPlane } from 'react-icons/fa';
 import { HiCheck, HiInformationCircle } from 'react-icons/hi';
 import { LoginSlice } from '@/features/loginSlice';
 const LoginForm = () => {
-	const [error, setError] = useState('');
-	const [success, setSuccess] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [pass, setPass] = useState(false);
-
-	('');
+const{authstate:{errormessage,successmessage},setAuthState}=useGlobalContext()
 	const router = useRouter();
-	const formref = useRef();
+
 
 	const handleLogin = useCallback((ev) => {
 		ev.preventDefault();
 		let email = ev.target.email.value;
 		let password = ev.target.password.value;
 		const formdata = { email, password };
-		LoginSlice(formdata, setLoading, setError, setSuccess, router);
-	}, []);
+		LoginSlice(formdata, setLoading,setAuthState, router);
+	}, [router,setAuthState]);
 	return (
 		<div className="grid place-items-center h-screen w-full relative bg-grey-500">
-			{success && (
+			{successmessage && (
 				<div className="absolute w-full h-screen/2 top-[140px] -mr-[100px] -md:-mr-[2930px] md:h-screen">
 					<Toast className="bg-green-300">
 						<div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-100 text-green-500 dark:bg-green-800 dark:text-green-200">
@@ -96,13 +93,18 @@ const LoginForm = () => {
 					>
 						<FaGoogle className="mr-3" /> Signin with Google
 					</Button>
-					{error && (
+					{errormessage && (
 						<Alert color="failure" icon={HiInformationCircle}>
-							{error}
+							{errormessage}
+						</Alert>
+					)}
+							{successmessage && (
+						<Alert color="failure" icon={HiInformationCircle}>
+							{successmessage}
 						</Alert>
 					)}
 					<span className="text-sm text-right mt-3">
-						<span>Don't have an account,</span>
+						<span>Don&#39;t have an account,</span>
 						<Link className="underline" href={'/signup'}>
 							Register here
 						</Link>

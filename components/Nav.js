@@ -1,9 +1,11 @@
-'use client';
+
 
 import { Avatar } from 'flowbite-react';
 import Link from 'next/link';
 import { TfiAlignRight } from 'react-icons/tfi';
-export default function Nav() {
+import LandingButton from './sub-components/LandingButton';
+export default function Nav({auth}) {
+	
 	return (
 		<main className="flex bg-cyan-900 text-white items-center p-3 w-full md:justify-around justify-between bg-cyan-900">
 			<div className="flex md:flex-start md:w-20 ">
@@ -12,7 +14,7 @@ export default function Nav() {
 				</span>
 				<span className="  font-bold p-1 shadow-blue-500">Up</span>
 			</div>
-			
+			{auth ? 
 			<div>
 				<div className="hidden md:inline  ">
 					{' '}
@@ -39,6 +41,12 @@ export default function Nav() {
 					<Link href="/settings">settings</Link>
 				</div>
 			</div>
+:
+<div className="flex mx-3">
+<LandingButton title='SignIn' classbut=" mr-3 bg-blue-500" />
+<LandingButton title='SignUp' classbut=" mr-3"/>
+</div>
+}
 			<TfiAlignRight className="inline md:hidden w-5 h-5 mx-2 cursor-pointer hover:opacity-8 hover:bg-green" />
 			<Avatar
 				rounded
