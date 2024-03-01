@@ -14,11 +14,57 @@ const generateToken = (id) => {
 export async function POST(req) {
   try {
     await connectDb();
-    const { fullname, email, city, username, password, cpassword } =
-      await req.json();
-
+    const {
+      firstname,
+      secondname,
+      instrument,
+      experience,
+      age,
+      city,
+      phone,
+      email,
+      email2,
+      username,
+      password,
+      cpassword,
+    } = await req.json();
+    console.log(
+      firstname,
+      secondname,
+      email,
+      instrument,
+      experience,
+      age,
+      city,
+      phone,
+      email2,
+      username,
+      password,
+      cpassword
+    );
+    if (
+      !firstname ||
+      !secondname ||
+      !instrument ||
+      !experience ||
+      !age ||
+      !city ||
+      !phone ||
+      !email2 ||
+      !email ||
+      !username ||
+      !password
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "All fields are required",
+        },
+        { status: 403 }
+      );
+    }
     const exists = await User.findOne({
-      $or: [{ email }, { username }],
+      $or: [{ email }, { username }, email2],
     });
 
     if (!exists) {
@@ -26,9 +72,15 @@ export async function POST(req) {
         if (password.length >= 8 && username.length >= 8) {
           const hashedPass = await bcrypt.hash(password, 10);
           const newUser = await User.create({
-            email,
-            fullname,
+            firstname,
+            secondname,
+            instrument,
+            experience,
+            age,
             city,
+            phone,
+            email,
+            emailtwo: email2,
             username,
             password: hashedPass,
           });
