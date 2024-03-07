@@ -28,20 +28,7 @@ export async function POST(req) {
       password,
       cpassword,
     } = await req.json();
-    console.log(
-      firstname,
-      secondname,
-      email,
-      instrument,
-      experience,
-      age,
-      city,
-      phone,
-      email2,
-      username,
-      password,
-      cpassword
-    );
+
     if (
       !firstname ||
       !secondname ||
@@ -64,7 +51,7 @@ export async function POST(req) {
       );
     }
     const exists = await User.findOne({
-      $or: [{ email }, { username }, email2],
+      $or: [{ email }, { username }, { email2 }],
     });
 
     if (!exists) {

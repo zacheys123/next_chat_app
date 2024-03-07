@@ -8,22 +8,27 @@ import { useGlobalContext } from "../Context/store";
 const LoginPage = () => {
   const {
     authstate: { isAuthenticated },
+    setAuthState,
   } = useGlobalContext();
   const [isSuccess, setSuccess] = useState(false);
   const router = useRouter();
+  const user = JSON.parse(localStorage.getItem("profile"));
   useEffect(() => {
-    (async () => {
-      const { user, err } = await getUser();
+    if (user) {
+      setAuthState({
+        type: global.AUTHENTICATE,
+        payload: {
+          isAuthenticated: true,
+          authInfo: user,
+          mainUser: user,
+        },
+      });
+      router.push("/signup");
 
-      if (user) {
-        router.push("/");
-        setSuccess(true);
-        return;
-      }
-
-      router.push("/login");
-      setSuccess(true);
-    })();
+      return;
+    }
+    setSuccess(true);
+    router.push("/login");
   }, []);
   if (!isSuccess) {
     return <Loading />;

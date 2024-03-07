@@ -22,9 +22,8 @@ export async function registerSlice(
       setLoading(false);
       setError("");
       setSuccess(data?.message);
-
       setTimeout(() => {
-        router.push("/gigme");
+        router.push("/");
         localStorage.setItem("token", JSON.stringify(data?.token));
         localStorage.setItem("profile", JSON.stringify(data?.result));
       }, 3000);
