@@ -52,7 +52,7 @@ const StartForm = () => {
   const form_ref = useRef();
   useEffect(() => {
     form_ref.current = userdata;
-  }, []);
+  }, [userdata]);
 
   return (
     <Card>
