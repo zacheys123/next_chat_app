@@ -23,7 +23,7 @@ const LoginPage = () => {
           mainUser: user,
         },
       });
-      router.push("/signup");
+      router.push(`/gigme/${user?.username}`);
 
       return;
     }

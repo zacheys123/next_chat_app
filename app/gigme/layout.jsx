@@ -3,12 +3,13 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./Loading";
-import Nav from "@/components/Nav";
+import Nav from "./Nav";
 import { getUser } from "@/features/protectSlice";
 import { useGlobalContext } from "../Context/store";
 import { global } from "@/reducerActions/authActions";
-
+import { useSession } from "next-auth/react";
 export default function MainPageLayout({ children }) {
+  const { status } = useSession();
   const {
     authstate: { authInfo, mainUser },
     setAuthState,
@@ -20,7 +21,10 @@ export default function MainPageLayout({ children }) {
     (async () => {
       const { user, err } = await getUser();
       console.log(user);
-      if (err?.response?.statusText === "Unauthorized") {
+      if (
+        err?.response?.statusText === "Unauthorized" &&
+        !status === "authenticated"
+      ) {
         setAuthState({
           type: global.AUTHENTICATE,
           payload: { isAuthenticated: false, authInfo: user },
@@ -40,8 +44,9 @@ export default function MainPageLayout({ children }) {
     return <Loading />;
   }
   return (
-    <main className="bg-black">
-      <div className="text-white text-3xl">{mainUser?.fullname}</div>
+    <main className="min-h-[100vh] overflow-auto">
+      <Nav />
+
       {children}
     </main>
   );

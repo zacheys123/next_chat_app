@@ -12,6 +12,8 @@ const RouteButton = ({ className, title, destination, children }) => {
       router.push(destination);
     } else if (title === "login") {
       router.push(destination);
+    } else if (title === "finish") {
+      router.push(destination);
     }
     return;
   };

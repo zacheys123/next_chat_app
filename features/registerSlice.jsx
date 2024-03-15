@@ -3,7 +3,8 @@ export async function registerSlice(
   setError,
   setLoading,
   router,
-  setSuccess
+  setSuccess,
+  setAuthState
 ) {
   console.log(form);
   try {
@@ -20,8 +21,11 @@ export async function registerSlice(
     console.log(data);
     if (res.ok) {
       setLoading(false);
-      setError("");
-      setSuccess(data?.message);
+
+      setAuthState({ type: global.CLEAR_ERROR });
+
+      setAuthState({ type: global.SUCCESS, payload: data?.message });
+
       setTimeout(() => {
         router.push("/");
         localStorage.setItem("token", JSON.stringify(data?.token));
@@ -29,17 +33,24 @@ export async function registerSlice(
       }, 3000);
     } else {
       setLoading(false);
-      setSuccess("");
+
+      setLoading(false);
+      setAuthState({ type: global.CLEAR_SUCCESS });
       setTimeout(() => {
-        setError("");
+        setAuthState({ type: global.CLEAR_ERROR });
       }, 4000);
-      setError(data?.message);
+      setAuthState({ type: global.ERROR, payload: data?.message });
     }
   } catch (error) {
     setLoading(false);
     if (error.message === "Network Error") {
-      setSuccess("");
-      setError(error.message);
+      setAuthState({
+        type: global.CLEAR_SUCESS,
+      });
+      setAuthState({
+        type: global.ERROR,
+        payload: error.message,
+      });
       setLoading(false);
       setTimeout(() => {
         router.push("/");

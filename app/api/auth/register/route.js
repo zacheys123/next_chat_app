@@ -25,6 +25,7 @@ export async function POST(req) {
       email,
       email2,
       username,
+      other,
       password,
       cpassword,
     } = await req.json();
@@ -69,6 +70,7 @@ export async function POST(req) {
             email,
             emailtwo: email2,
             username,
+            other,
             password: hashedPass,
           });
           const token = generateToken(newUser._id);

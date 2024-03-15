@@ -22,7 +22,6 @@ export const authReducer = (state, action) => {
     case global.SUCCESS:
       return {
         ...state,
-
         errormessage: "",
         successmessage: action.payload,
       };

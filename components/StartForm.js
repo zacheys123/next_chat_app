@@ -7,21 +7,27 @@ import {
   Select,
   Spinner,
   TextInput,
+  Textarea,
 } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
 import { HiInformationCircle } from "react-icons/hi";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { FaGoogle } from "react-icons/fa";
 import RouteButton from "./sub-components/RouteButton";
 import { registerSlice } from "@/features/registerSlice";
 import { useRouter } from "next/navigation";
 import { TiTick } from "react-icons/ti";
 import { FormGroup } from "@mui/material";
+import { useGlobalContext } from "@/app/Context/store";
+import Oauth from "./Oauth";
 const StartForm = () => {
+  const {
+    authstate: { errormessage, successmessage },
+    setAuthState,
+  } = useGlobalContext();
   const router = useRouter();
-  const [instrument, setSelectedInstrument] = useState("");
-  const [experience, setSelectedExperience] = useState("");
+  const [instrument, setSelectedInstrument] = useState("Piano");
+  const [experience, setSelectedExperience] = useState("noExp");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [userdata, setData] = useState({
@@ -33,6 +39,7 @@ const StartForm = () => {
     email: "",
     email2: "",
     username: "",
+    other: "",
     password: "",
     cpassword: "",
   });
@@ -47,13 +54,21 @@ const StartForm = () => {
     event.preventDefault();
     const newdata = { ...userdata, experience, instrument };
 
-    registerSlice(newdata, setError, setLoading, router, setSuccess);
+    registerSlice(
+      newdata,
+      setError,
+      setLoading,
+      router,
+      setSuccess,
+      setAuthState
+    );
   };
   const form_ref = useRef();
   useEffect(() => {
     form_ref.current = userdata;
   }, [userdata]);
 
+  const [otherinput, setOther] = useState(false);
   return (
     <Card>
       <form className="px-3 py-3 w-full dark:bg-red-300 md:w-[450px]">
@@ -116,8 +131,6 @@ const StartForm = () => {
           <div className="grid grid-cols-2 gap-4">
             {" "}
             <TextInput
-              placeholder-gray-400
-              rounded-smt
               className="w-100 focus:ring-0 mb-2"
               type="text"
               onChange={handleInput}
@@ -139,7 +152,7 @@ const StartForm = () => {
               <Label
                 htmlFor="city"
                 value="Instrument of Choice"
-                className="text-white"
+                className="text-zinc"
               />
             </div>
             <Select
@@ -159,6 +172,7 @@ const StartForm = () => {
               <option value="flute">Flute</option>
               <option value="clarinet">Clarinet</option>{" "}
               <option>Ukulele</option>
+              <option onClick={() => setOther(true)}>Other...</option>
             </Select>
           </div>
           <div className="max-w-md">
@@ -166,7 +180,7 @@ const StartForm = () => {
               <Label
                 htmlFor="experience"
                 value="Experience"
-                className="text-white"
+                className="text-zinc"
               />
             </div>
             <Select
@@ -182,16 +196,28 @@ const StartForm = () => {
               <option value="less">less than 2yrs</option>
               <option value="noExp">No Experience</option>
             </Select>
+            {otherinput && (
+              <Textarea
+                name="other"
+                value={userdata.other}
+                onChange={handleInput}
+                placeholder="Other Instrument /instruments..."
+                required
+                rows={4}
+                className="resize-none mt-3"
+              ></Textarea>
+            )}
           </div>
           <div className="flex gap-2 align-center">
             <TextInput
-              className="border-b-4 border-cyan-600 focus:ring-0 mb-2 border-transparent focus:border-transparent w-full"
+              className="border-b-4  border-cyan-600 focus:ring-0 mb-2 border-transparent focus:border-transparent w-full"
               required
               type={!pass ? "password" : "text"}
               name="password"
               value={userdata?.password}
               onChange={handleInput}
               placeholder="Enter Password"
+              style={{ resize: "none" }}
             />
             {pass ? (
               <VisibilityIcon
@@ -227,14 +253,14 @@ const StartForm = () => {
               />
             )}{" "}
           </div>{" "}
-          {error && (
+          {errormessage && (
             <Alert color="failure" icon={HiInformationCircle}>
-              {error}
+              {errormessage}
             </Alert>
           )}
-          {success && (
+          {successmessage && (
             <Alert color="success" icon={TiTick}>
-              {success}
+              {successmessage}
             </Alert>
           )}
         </div>
@@ -247,15 +273,7 @@ const StartForm = () => {
         >
           {!loading ? "Sign Up" : <Spinner color="info" />}
         </Button>
-        <Button
-          type="button"
-          color="ghost"
-          className="px-2 w-full"
-          gradientMonochrome="success"
-        >
-          <FaGoogle className="mr-3 text-red-600 font-bold" /> Signin with
-          Google
-        </Button>{" "}
+        <Oauth />
         <div className="w-100 text-center my-[10px]">
           <RouteButton
             title="login"

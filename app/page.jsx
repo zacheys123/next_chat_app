@@ -7,7 +7,18 @@ import ImageComponent from "@/components/ImageComponent";
 import { FaArrowCircleRight } from "react-icons/fa";
 import bgImage from "@/public/assets/bg-cover.jpg";
 import RouteButton from "@/components/sub-components/RouteButton";
+import { useSession } from "next-auth/react";
 export default function Home() {
+  const { status } = useSession();
+  const validUser = () => {
+    let val = window?.localStorage.getItem("profile");
+    if (!val) {
+      return null;
+    }
+    return JSON.parse(val);
+  };
+  console.log(validUser());
+
   return (
     <main className="h-screen">
       <ImageComponent bgCover={bgImage} />
@@ -29,23 +40,51 @@ export default function Home() {
               </span>{" "}
               <span className="text-center">with every musician you know</span>
             </span>
-            <p className="text-3xl font-poppins text-center mt-4">
+            <p className="text-3xl text-ascent-2  font-semibold font-poppins text-center mt-4">
               {" "}
               Welcome to GigMeUp
             </p>
           </h1>
-          <RouteButton
-            title="register"
-            className="w-full flex items-center justify-center my-12"
-            destination="/signup"
-          >
-            <button className="my-3 w-fit  text-white hover:text-white rounded-full p-4 bg-red-600 hover:bg-blue-800 flex items-center">
-              <span className="md:text-3xl flex mx-3">
-                Get Started{" "}
-                <FaArrowCircleRight className="ml-3 h-4 w-4 md:w-10 md:h-10" />
-              </span>
-            </button>
-          </RouteButton>
+          {!validUser()?._id && !status === "authenticated" ? (
+            <RouteButton
+              title="register"
+              className="w-full flex items-center justify-center my-12"
+              destination="/signup"
+            >
+              <button className="my-3 w-fit  text-white hover:text-white rounded-full p-4 bg-red-600 hover:bg-blue-800 flex items-center">
+                <span className="md:text-3xl flex mx-3">
+                  Get Started{" "}
+                  <FaArrowCircleRight className="ml-3 h-4 w-4 md:w-10 md:h-10" />
+                </span>
+              </button>
+            </RouteButton>
+          ) : !status === "authenticated" ? (
+            <RouteButton
+              title="register"
+              className="w-full flex items-center justify-center my-12"
+              destination="/signup"
+            >
+              <button className="my-3 w-fit  text-white hover:text-white rounded-full p-4 bg-red-600 hover:bg-blue-800 flex items-center">
+                <span className="md:text-3xl flex mx-3">
+                  Get Started{" "}
+                  <FaArrowCircleRight className="ml-3 h-4 w-4 md:w-10 md:h-10" />
+                </span>
+              </button>
+            </RouteButton>
+          ) : (
+            <RouteButton
+              title="finish"
+              className="w-full flex items-center justify-center my-12"
+              destination={`/gigme/${validUser()?.username || "user"}`}
+            >
+              <button className="my-3 w-fit  text-white hover:text-white rounded-full p-4 bg-red-600 hover:bg-blue-800 flex items-center">
+                <span className="md:text-3xl flex mx-3">
+                  Finish Up!!
+                  <FaArrowCircleRight className="ml-3 h-4 w-4 md:w-10 md:h-10" />
+                </span>
+              </button>
+            </RouteButton>
+          )}
         </div>
       </div>
       {/* <footer className="bg-grey shadow-md ">&copy;GigMeUp 2024</footer> */}
