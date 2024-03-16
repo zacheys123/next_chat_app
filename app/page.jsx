@@ -8,16 +8,18 @@ import { FaArrowCircleRight } from "react-icons/fa";
 import bgImage from "@/public/assets/bg-cover.jpg";
 import RouteButton from "@/components/sub-components/RouteButton";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 export default function Home() {
-  const { status } = useSession();
-  const validUser = () => {
+  const { status, data: session } = useSession();
+  const [validUser] = useState(() => {
     let val = window?.localStorage.getItem("profile");
     if (!val) {
       return null;
     }
     return JSON.parse(val);
-  };
-  console.log(validUser());
+  });
+  console.log(validUser);
+  const username = `${session?.user?.name.split(" ")[0]}@${session?.user?.name.split(" ")[1]}`;
 
   return (
     <main className="h-screen">
@@ -45,20 +47,7 @@ export default function Home() {
               Welcome to GigMeUp
             </p>
           </h1>
-          {!validUser()?._id && !status === "authenticated" ? (
-            <RouteButton
-              title="register"
-              className="w-full flex items-center justify-center my-12"
-              destination="/signup"
-            >
-              <button className="my-3 w-fit  text-white hover:text-white rounded-full p-4 bg-red-600 hover:bg-blue-800 flex items-center">
-                <span className="md:text-3xl flex mx-3">
-                  Get Started{" "}
-                  <FaArrowCircleRight className="ml-3 h-4 w-4 md:w-10 md:h-10" />
-                </span>
-              </button>
-            </RouteButton>
-          ) : !status === "authenticated" ? (
+          {!validUser?._id && status === "anauthenticated" ? (
             <RouteButton
               title="register"
               className="w-full flex items-center justify-center my-12"
@@ -75,7 +64,11 @@ export default function Home() {
             <RouteButton
               title="finish"
               className="w-full flex items-center justify-center my-12"
-              destination={`/gigme/${validUser()?.username || "user"}`}
+              destination={
+                validUser?.username
+                  ? `/gigme/${validUser?.username}`
+                  : `/gigme/${username}`
+              }
             >
               <button className="my-3 w-fit  text-white hover:text-white rounded-full p-4 bg-red-600 hover:bg-blue-800 flex items-center">
                 <span className="md:text-3xl flex mx-3">

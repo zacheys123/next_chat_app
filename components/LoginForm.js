@@ -11,6 +11,7 @@ import { Toast } from "flowbite-react";
 import { FaTelegramPlane } from "react-icons/fa";
 import { HiCheck, HiInformationCircle } from "react-icons/hi";
 import { LoginSlice } from "@/features/loginSlice";
+import Oauth from "./Oauth";
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [pass, setPass] = useState(false);
@@ -81,9 +82,7 @@ const LoginForm = () => {
           >
             {!loading ? "Sign In" : <Spinner color="info" />}
           </Button>
-          <Button type="button" gradientDuoTone="pinkToOrange" className="px-2">
-            <FaGoogle className="mr-3" /> Signin with Google
-          </Button>
+          <Oauth />
           {errormessage && (
             <Alert color="failure" icon={HiInformationCircle}>
               {errormessage}
@@ -96,7 +95,7 @@ const LoginForm = () => {
           )}
           <span className="text-sm text-right mt-3">
             <span>Don&#39;t have an account,</span>
-            <Link className="underline" href={"/"}>
+            <Link className="underline" href={"/signup"}>
               Register here
             </Link>
           </span>

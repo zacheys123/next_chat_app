@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     secondname: { type: String },
     email: {
       type: String,
-      required: [true, "email is required"],
+
       unique: true,
     },
     city: { type: String },
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
     },
     emailtwo: {
       type: String,
-      required: [true, "email is required"],
+
       unique: true,
     },
     username: {
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
     other: {
       type: String,
     },
-    password: { type: String, required: true },
+    password: { type: String },
   },
   { timestamps: true }
 );

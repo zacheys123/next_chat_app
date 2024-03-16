@@ -3,9 +3,19 @@ import Link from "next/link";
 import RouteButton from "./sub-components/RouteButton";
 import UserAvatar from "./UserAvatar";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "flowbite-react";
+import { Avatar, Button } from "flowbite-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 export default function Nav() {
+  const router = useRouter();
   const { status, data: session } = useSession();
+  const [id] = useState(() => {
+    let valid = window.localStorage.getItem("profile");
+    if (!valid) {
+      return null;
+    }
+    return JSON.parse(valid);
+  });
   return (
     <main className="flex bg-cyan-800 text-white items-center p-2 w-[100vw] md:justify-around justify-between bg-cyan-900">
       <RouteButton title="home" destination="/gigme">
@@ -17,7 +27,7 @@ export default function Nav() {
           <span className="  font-bold p-1 shadow-blue-500">Up</span>
         </div>
       </RouteButton>
-      {status === "authenticated" ? (
+      {status === "authenticated" || id ? (
         <div>
           <div className="hidden md:inline  ">
             {" "}
@@ -45,14 +55,26 @@ export default function Nav() {
           </div>
         </div>
       ) : (
-        <Button
-          className="bg-blue-600 text-white text-3xl w-25"
-          onClick={() => signIn("google")}
-        >
-          SignIn
-        </Button>
+        <div className="flex w-50 px-3">
+          {" "}
+          <Button
+            color="light"
+            pill
+            className=" mr-4 text-black text-3xl w-25"
+            onClick={() => signIn("google")}
+          >
+            SignIn
+          </Button>
+          <Button
+            className="bg-yellow-700 text-white text-3xl w-25"
+            onClick={() => router.push("/signup")}
+          >
+            SignUp
+          </Button>
+        </div>
       )}
-      <UserAvatar session={session} signOut={signOut} />{" "}
+      {session && <UserAvatar session={session} signOut={signOut} />}{" "}
+      {id && <UserAvatar id={id} />}
     </main>
   );
 }

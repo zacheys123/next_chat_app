@@ -9,37 +9,41 @@ import { useGlobalContext } from "../Context/store";
 import { global } from "@/reducerActions/authActions";
 import { useSession } from "next-auth/react";
 export default function MainPageLayout({ children }) {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const {
     authstate: { authInfo, mainUser },
     setAuthState,
   } = useGlobalContext();
 
   const router = useRouter();
+  const [id] = useState(() => {
+    let valid = window?.localStorage.getItem("profile");
+    if (!valid) {
+      return null;
+    }
+    return JSON.parse(valid);
+  });
   const [isSuccess, setSuccess] = useState(false);
-  useEffect(() => {
-    (async () => {
-      const { user, err } = await getUser();
-      console.log(user);
-      if (
-        err?.response?.statusText === "Unauthorized" &&
-        !status === "authenticated"
-      ) {
-        setAuthState({
-          type: global.AUTHENTICATE,
-          payload: { isAuthenticated: false, authInfo: user },
-        });
+  const username = `${session?.user?.name.split(" ")[0]}@${session?.user?.name.split(" ")[1]}`;
 
-        router.push("/login");
-        return;
-      }
-      setAuthState({
-        type: global.AUTHENTICATE,
-        payload: { isAuthenticated: true, authInfo: user },
-      });
+  useEffect(() => {
+    if (status === "unauthenticated" && !id) {
       setSuccess(true);
-    })();
-  }, [router]);
+      router.push("/signup");
+      return;
+    }
+
+    setSuccess(true);
+    return () => {
+      const routerFunc = () => {
+        if (id) {
+          return `/gigme/${id?.username}`;
+        }
+        return `/gigme/${username}`;
+      };
+      router.push(routerFunc());
+    };
+  }, [id, username, setAuthState, router, status]);
   if (!isSuccess) {
     return <Loading />;
   }
